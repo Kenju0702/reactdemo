@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './product.css'; // Giữ nguyên hoặc bỏ qua nếu bạn dùng Tailwind CSS
 
 const ListProduct = () => {
@@ -7,9 +7,9 @@ const ListProduct = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
+  const tableRef = useRef(null); // Tham chiếu cho bảng sản phẩm
+  const url = 'https://66b41ade9f9169621ea1c6f2.mockapi.io/crud/ap1/sanpham';
   const getListProduct = async () => {
-    let url = 'https://66b41ade9f9169621ea1c6f2.mockapi.io/crud/ap1/sanpham';
     try {
       const response = await fetch(url);
       const json = await response.json();
@@ -39,7 +39,7 @@ const ListProduct = () => {
 
   const handleDeleteClick = async (id) => {
     try {
-      await fetch(`https://66b41ade9f9169621ea1c6f2.mockapi.io/crud/ap1/sanpham/${id}`, {
+      await fetch(url+`/${id}`, {
         method: 'DELETE',
       });
       getListProduct();
@@ -55,32 +55,43 @@ const ListProduct = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    const tableElement = tableRef.current;
+    const scrollTop = tableElement ? tableElement.scrollTop : 0; // Ghi nhớ vị trí cuộn
+
     if (isEditing) {
       // Cập nhật sản phẩm
       try {
-        await fetch(`https://66b41ade9f9169621ea1c6f2.mockapi.io/crud/ap1/sanpham/${selectedProduct.id}`, {
+        await fetch(url+`/${selectedProduct.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(selectedProduct),
         });
+        getListProduct(); // Lấy lại danh sách sau khi cập nhật
       } catch (error) {
         console.error(error);
       }
     } else {
       // Thêm sản phẩm
       try {
-        await fetch('https://66b41ade9f9169621ea1c6f2.mockapi.io/crud/ap1/sanpham', {
+        const response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(selectedProduct),
         });
+
+        const newProduct = await response.json();
+        setDSSP(prevDSSP => [newProduct, ...prevDSSP]); // Thêm sản phẩm mới vào đầu danh sách
       } catch (error) {
         console.error(error);
       }
     }
 
     setIsModalVisible(false);
-    getListProduct();
+    setTimeout(() => {
+      if (tableElement) {
+        tableElement.scrollTop = scrollTop; // Khôi phục vị trí cuộn
+      }
+    }, 0);
   };
 
   return (
@@ -89,8 +100,8 @@ const ListProduct = () => {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <table className="min-w-full bg-white shadow-md rounded-lg">
-          <thead className="bg-blue-500 text-white">
+        <table ref={tableRef} className="min-w-full bg-white shadow-md rounded-lg">
+          <thead className="bg-blue-500 text-white ">
             <tr>
               <th className="px-4 py-2">ID</th>
               <th className="px-4 py-2">Tên Sản Phẩm</th>
@@ -100,7 +111,7 @@ const ListProduct = () => {
           </thead>
           <tbody>
             {DSSP.map(item => (
-              <tr key={item.id} className="border-b">
+              <tr key={item.id} className="border-b min-w-full px-40">
                 <td className="px-4 py-2">{item.id}</td>
                 <td className="px-4 py-2">{item.name}</td>
                 <td className="px-4 py-2">{item.invoices ? 'Có' : 'Không'}</td>
