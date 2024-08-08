@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Goodbye = () => {
-  // Định nghĩa phương thức handleClick
+  // Create a state variable to control the visibility of the "hello" message
+  const [showMessage, setShowMessage] = useState(false);
+
   const handleClick = () => {
     alert('Ngon');
+    
+    setShowMessage(true);
   };
-
   return (
     <div>
       GoodbyeComponent
-      {/* Đặt nội dung cho nút và gán sự kiện onClick */}
+      
       <button onClick={handleClick}>Click me</button>
+      
+   
+      {showMessage && <p>hello</p>}
     </div>
   );
 };

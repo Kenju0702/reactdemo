@@ -1,0 +1,62 @@
+/* product.css */
+.table-container {
+  background-color: #1e3a8a; /* Màu nền cho div chứa bảng */
+  color: white;
+  padding: 16px;
+}
+
+.table-container h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.table-container table {
+  min-width: 100%;
+  background-color: white;
+  color: black;
+  border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table-container th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.table-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table-container tr:hover {
+  background-color: #ddd;
+}
+
+.table-container button {
+  margin: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.table-container .add-button {
+  background-color: #4caf50; /* Màu nền xanh lá cây cho nút thêm */
+}
+
+.table-container .add-button:hover {
+  background-color: #45a049; /* Màu nền xanh lá cây đậm hơn khi hover */
+}
+
+.table-container .delete-button {
+  background-color: #f44336; /* Màu nền đỏ cho nút xóa */
+}
+
+.table-container .delete-button:hover {
+  background-color: #e53935; /* Màu nền đỏ đậm hơn khi hover */
+}

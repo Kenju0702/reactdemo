@@ -1,14 +1,13 @@
-// src/App.js
+// src/App.jsx
 import React from 'react';
-import HelloWorld from './components/Hellocomponent/HelloWorld';
-import Goodbye from './components/Goodbyecomponent/Goodbye';
+import ListProduct from './components/product/listProduct';
+
 function App() {
   return (
-    
-    <div>
-      <h1>tao day ne</h1>
-      <HelloWorld />
-      <Goodbye/>
+    <div className="min-h-screen bg-gray-200 p-10">
+     
+        <ListProduct />
+     
     </div>
   );
 }
